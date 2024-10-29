@@ -45,13 +45,16 @@ train_data['cleaned_text'] = train_data['crimeaditionalinfo'].apply(preprocess_t
 
 # Split data into training and test sets
 X = train_data['cleaned_text']
-y = train_data['category']
+y = train_data['category']  # Main category
+y_sub = train_data['sub_category']  # Sub-category
 
 # Convert labels to numerical format using LabelEncoder
 label_encoder = LabelEncoder()
+label_encoder_sub = LabelEncoder()
 y_encoded = label_encoder.fit_transform(y)
+y_sub_encoded = label_encoder_sub.fit_transform(y_sub)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test, y_train_sub, y_test_sub = train_test_split(X, y_encoded, y_sub_encoded, test_size=0.2, random_state=42)
 
 # Tokenization and Padding (for deep learning models)
 max_words = 5000  # Maximum number of words to consider in the vocabulary
@@ -140,7 +143,7 @@ model.save('gru_model.h5')
 joblib.dump(tokenizer, 'tokenizer.pkl')
 joblib.dump(label_encoder, 'label_encoder.pkl')
 
-#GUI based model
+#Tkinter GUI based model
 
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
